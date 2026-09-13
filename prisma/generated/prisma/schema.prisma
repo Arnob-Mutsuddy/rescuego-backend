@@ -1,0 +1,392 @@
+// prisma/schema/admin.prisma
+
+model Admin {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  permissions String[] @default(["VIEW_DASHBOARD"])
+
+  department  String?
+  designation String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([userId])
+}
+
+// prisma/schema/driver.prisma
+
+model Driver {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  licenseNumber String   @unique
+  licenseExpiry DateTime
+  isApproved    Boolean  @default(false)
+
+  isAvailable   Boolean   @default(false)
+  dutyStartTime DateTime?
+  dutyEndTime   DateTime?
+
+  yearsOfExperience Int?
+  certification     String?
+
+  ambulances        Ambulance[]
+  emergencyRequests EmergencyRequest[]
+  trips             Trip[]
+  locations         DriverLocation[]
+  reviewsReceived   Review[]           @relation("DriverReviews")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([userId])
+  @@index([isApproved])
+  @@index([isAvailable])
+}
+
+model Ambulance {
+  id       String @id @default(cuid())
+  driverId String
+  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  registrationNo    String @unique
+  ambulanceType     String
+  capacity          Int
+  manufacturingYear Int?
+
+  status AmbulanceStatus @default(ACTIVE)
+
+  equipment String[]
+
+  trips Trip[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([driverId])
+  @@index([status])
+}
+
+model DriverLocation {
+  id       String @id @default(cuid())
+  driverId String
+  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  latitude  Float
+  longitude Float
+  accuracy  Float?
+
+  speed    Float?
+  heading  Float?
+  altitude Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([driverId])
+  @@index([createdAt])
+}
+
+// prisma/schema/hospital.prisma
+
+model Hospital {
+  id      String  @id @default(cuid())
+  name    String
+  phone   String
+  email   String?
+  address String
+  website String?
+
+  latitude  Float
+  longitude Float
+
+  capacity            Int
+  emergencyDepartment Boolean @default(true)
+  operatingHours      String?
+
+  trips             Trip[]
+  emergencyRequests EmergencyRequest[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([name])
+  @@index([latitude, longitude])
+}
+
+// prisma/schema/patient.prisma
+
+model Patient {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dateOfBirth    DateTime?
+  bloodGroup     String?
+  medicalHistory String?
+
+  emergencyContactName  String?
+  emergencyContactPhone String?
+
+  emergencyRequests EmergencyRequest[]
+  payments          Payment[]
+  reviews           Review[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([userId])
+}
+
+model EmergencyRequest {
+  id        String  @id @default(cuid())
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  driverId String?
+  driver   Driver? @relation(fields: [driverId], references: [id])
+
+  emergencyType String
+  severity      String
+  description   String?
+
+  patientLat     Float
+  patientLng     Float
+  patientAddress String?
+  accuracy       Float?
+
+  hospitalId String?
+  hospital   Hospital? @relation(fields: [hospitalId], references: [id])
+
+  status EmergencyStatus @default(PENDING)
+
+  trip Trip?
+
+  payment Payment?
+
+  estimatedDistance Float?
+  estimatedTime     Int?
+  estimatedCost     Float?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+  cancelledAt DateTime?
+  deletedAt   DateTime?
+
+  @@index([patientId])
+  @@index([driverId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([severity])
+}
+
+// prisma/schema/payment.prisma
+
+model Payment {
+  id        String  @id @default(cuid())
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  emergencyRequestId String           @unique
+  emergencyRequest   EmergencyRequest @relation(fields: [emergencyRequestId], references: [id], onDelete: Cascade)
+
+  amount   Float
+  currency String @default("USD")
+
+  status PaymentStatus @default(PENDING)
+
+  stripePaymentIntentId String?
+  stripeSessionId       String?
+  stripeCustomerId      String?
+
+  paymentMethod String?
+
+  description String?
+  receiptUrl  String?
+
+  refundAmount Float?
+  refundReason String?
+  refundedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([status])
+  @@index([stripePaymentIntentId])
+}
+
+model Review {
+  id        String  @id @default(cuid())
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  driverId String
+  driver   Driver @relation("DriverReviews", fields: [driverId], references: [id], onDelete: Cascade)
+
+  rating  Int     @default(5)
+  comment String?
+
+  cleanliness     Int?
+  professionalism Int?
+  communication   Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([driverId])
+  @@index([patientId])
+  @@index([rating])
+}
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// prisma/schema/shared.prisma
+
+enum UserRole {
+  PATIENT
+  DRIVER
+  ADMIN
+}
+
+enum AmbulanceStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
+enum EmergencyStatus {
+  PENDING
+  ASSIGNED
+  ACCEPTED
+  EN_ROUTE
+  ARRIVED
+  PATIENT_PICKED_UP
+  AT_HOSPITAL
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  password String
+  phone    String   @unique
+  fullName String
+  role     UserRole @default(PATIENT)
+  avatar   String?
+  isActive Boolean  @default(true)
+
+  patient Patient?
+  driver  Driver?
+  admin   Admin?
+
+  auditLogs AuditLog[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([email])
+  @@index([phone])
+  @@index([role])
+}
+
+model AuditLog {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  action     String
+  resource   String
+  resourceId String
+
+  changes   Json?
+  ipAddress String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([action])
+}
+
+// prisma/schema/trip.prisma
+
+model Trip {
+  id                 String           @id @default(cuid())
+  emergencyRequestId String           @unique
+  emergencyRequest   EmergencyRequest @relation(fields: [emergencyRequestId], references: [id], onDelete: Cascade)
+
+  driverId String
+  driver   Driver @relation(fields: [driverId], references: [id])
+
+  ambulanceId String
+  ambulance   Ambulance @relation(fields: [ambulanceId], references: [id])
+
+  hospitalId String
+  hospital   Hospital @relation(fields: [hospitalId], references: [id])
+
+  distance      Float
+  estimatedTime Int
+  actualTime    Int?
+
+  baseFare  Float  @default(100)
+  perKmFare Float  @default(50)
+  totalFare Float?
+
+  acceptedAt        DateTime?
+  enRouteAt         DateTime?
+  arrivedAt         DateTime?
+  pickedUpAt        DateTime?
+  arrivedHospitalAt DateTime?
+  completedAt       DateTime?
+
+  notes              String?
+  cancellationReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([driverId])
+  @@index([emergencyRequestId])
+  @@index([completedAt])
+}

@@ -1,0 +1,27 @@
+// prisma/schema/hospital.prisma
+
+model Hospital {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  address   String
+  website   String?
+
+  latitude  Float
+  longitude Float
+  
+  capacity  Int
+  emergencyDepartment Boolean @default(true)
+  operatingHours String?
+
+  trips     Trip[]
+  emergencyRequests EmergencyRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([name])
+  @@index([latitude, longitude])
+}

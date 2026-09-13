@@ -1,0 +1,41 @@
+// prisma/schema/trip.prisma
+
+model Trip {
+  id                  String   @id @default(cuid())
+  emergencyRequestId  String   @unique
+  emergencyRequest    EmergencyRequest @relation(fields: [emergencyRequestId], references: [id], onDelete: Cascade)
+
+  driverId            String
+  driver              Driver   @relation(fields: [driverId], references: [id])
+
+  ambulanceId         String
+  ambulance           Ambulance @relation(fields: [ambulanceId], references: [id])
+
+  hospitalId          String
+  hospital            Hospital @relation(fields: [hospitalId], references: [id])
+
+  distance            Float
+  estimatedTime       Int
+  actualTime          Int?
+
+  baseFare            Float    @default(100)
+  perKmFare           Float    @default(50)
+  totalFare           Float?
+
+  acceptedAt          DateTime?
+  enRouteAt           DateTime?
+  arrivedAt           DateTime?
+  pickedUpAt          DateTime?
+  arrivedHospitalAt   DateTime?
+  completedAt         DateTime?
+
+  notes               String?
+  cancellationReason  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([driverId])
+  @@index([emergencyRequestId])
+  @@index([completedAt])
+}

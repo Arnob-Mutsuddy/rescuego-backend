@@ -1,0 +1,67 @@
+// prisma/schema/patient.prisma
+
+model Patient {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dateOfBirth    DateTime?
+  bloodGroup     String?
+  medicalHistory String?
+  
+  emergencyContactName  String?
+  emergencyContactPhone String?
+
+  emergencyRequests EmergencyRequest[]
+  payments          Payment[]
+  reviews           Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([userId])
+}
+
+model EmergencyRequest {
+  id              String   @id @default(cuid())
+  patientId       String
+  patient         Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  driverId        String?
+  driver          Driver?  @relation(fields: [driverId], references: [id])
+
+  emergencyType   String
+  severity        String
+  description     String?
+
+  patientLat      Float
+  patientLng      Float
+  patientAddress  String?
+  accuracy        Float?
+
+  hospitalId      String?
+  hospital        Hospital? @relation(fields: [hospitalId], references: [id])
+
+  status          EmergencyStatus @default(PENDING)
+
+  trip            Trip?
+
+  payment         Payment?
+
+  estimatedDistance Float?
+  estimatedTime   Int?
+  estimatedCost   Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  completedAt DateTime?
+  cancelledAt DateTime?
+  deletedAt DateTime?
+
+  @@index([patientId])
+  @@index([driverId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([severity])
+}

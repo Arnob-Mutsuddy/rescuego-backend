@@ -1,0 +1,58 @@
+// prisma/schema/payment.prisma
+
+model Payment {
+  id              String   @id @default(cuid())
+  patientId       String
+  patient         Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  emergencyRequestId String @unique
+  emergencyRequest   EmergencyRequest @relation(fields: [emergencyRequestId], references: [id], onDelete: Cascade)
+
+  amount          Float
+  currency        String   @default("USD")
+
+  status          PaymentStatus @default(PENDING)
+
+  stripePaymentIntentId String?
+  stripeSessionId       String?
+  stripeCustomerId      String?
+
+  paymentMethod   String?
+
+  description     String?
+  receiptUrl      String?
+
+  refundAmount    Float?
+  refundReason    String?
+  refundedAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([status])
+  @@index([stripePaymentIntentId])
+}
+
+model Review {
+  id              String   @id @default(cuid())
+  patientId       String
+  patient         Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  driverId        String
+  driver          Driver   @relation("DriverReviews", fields: [driverId], references: [id], onDelete: Cascade)
+
+  rating          Int      @default(5)
+  comment         String?
+  
+  cleanliness     Int?
+  professionalism Int?
+  communication   Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([driverId])
+  @@index([patientId])
+  @@index([rating])
+}
