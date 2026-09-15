@@ -1,12 +1,12 @@
 // src/controllers/dispatch.controller.ts
 import { Request, Response, NextFunction } from "express";
-import { DispatchService } from "@/services/dispatch.service.js";
-import { HTTP_STATUS } from "@/config/constants.js";
+import { DispatchService } from "../services/dispatch.service.js";
+import { HTTP_STATUS } from "../config/constants.js";
+import prisma from "../config/database.js";
 import { z } from "zod";
 
 const dispatchService = new DispatchService();
 
-// Validation schemas
 const findNearestSchema = z.object({
   patientLat: z.number().min(-90).max(90),
   patientLng: z.number().min(-180).max(180),
@@ -35,9 +35,6 @@ const updateTripStatusSchema = z.object({
 });
 
 export class DispatchController {
-  /**
-   * to find nearest ambulances
-   */
   async findNearestAmbulances(req: Request, res: Response, next: NextFunction) {
     try {
       const validated = findNearestSchema.parse(req.body);
@@ -58,9 +55,6 @@ export class DispatchController {
     }
   }
 
-  /**
-   * Emergency request driver assign
-   */
   async assignEmergency(req: Request, res: Response, next: NextFunction) {
     try {
       const validated = assignEmergencySchema.parse(req.body);
@@ -83,21 +77,20 @@ export class DispatchController {
     }
   }
 
-  /**
-   * Driver dispatch accept
-   */
   async acceptDispatch(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = (req as any).userId;
       const validated = acceptDispatchSchema.parse(req.body);
 
-      // Get driver ID
-      const driver = await require("@prisma/client").PrismaClient().driver.findUnique({
+      const driver = await prisma.driver.findUnique({
         where: { userId },
       });
 
       if (!driver) {
-        throw new Error("Driver not found");
+        return res.status(HTTP_STATUS.NOT_FOUND).json({
+          success: false,
+          message: "Driver not found",
+        });
       }
 
       const result = await dispatchService.acceptDispatch(
@@ -115,22 +108,20 @@ export class DispatchController {
     }
   }
 
-  /**
-   * Driver dispatch reject
-   */
   async rejectDispatch(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = (req as any).userId;
       const validated = rejectDispatchSchema.parse(req.body);
 
-      // Get driver ID
-      const prisma = require("@prisma/client").PrismaClient;
-      const driver = await new prisma().driver.findUnique({
+      const driver = await prisma.driver.findUnique({
         where: { userId },
       });
 
       if (!driver) {
-        throw new Error("Driver not found");
+        return res.status(HTTP_STATUS.NOT_FOUND).json({
+          success: false,
+          message: "Driver not found",
+        });
       }
 
       const result = await dispatchService.rejectDispatch(
@@ -148,22 +139,20 @@ export class DispatchController {
     }
   }
 
-  /**
-Trip status update
-   */
   async updateTripStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = (req as any).userId;
       const validated = updateTripStatusSchema.parse(req.body);
 
-      // Get driver ID
-      const prisma = require("@prisma/client").PrismaClient;
-      const driver = await new prisma().driver.findUnique({
+      const driver = await prisma.driver.findUnique({
         where: { userId },
       });
 
       if (!driver) {
-        throw new Error("Driver not found");
+        return res.status(HTTP_STATUS.NOT_FOUND).json({
+          success: false,
+          message: "Driver not found",
+        });
       }
 
       const result = await dispatchService.updateTripStatus(

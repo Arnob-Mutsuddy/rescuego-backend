@@ -1,4 +1,4 @@
-// src/services/dispatch.service.ts
+
 import prisma from "@/config/database.js";
 import { AppError } from "@/middleware/errorHandler.js";
 import { HTTP_STATUS } from "@/config/constants.js";
@@ -6,7 +6,7 @@ import { calculateDistance, estimateTime } from "@/utils/distance.js";
 
 export class DispatchService {
   /**
-   * Emergency request nearest available ambulances find
+    Emergency request nearest available ambulances find
    */
   async findNearestAmbulances(
     patientLat: number,
@@ -287,7 +287,7 @@ export class DispatchService {
   }
 
   /**
-   * Driver emergency request reject করে
+   * Driver emergency request reject 
    */
   async rejectDispatch(emergencyRequestId: string, driverId: string) {
     const emergency = await prisma.emergencyRequest.findUnique({
@@ -351,7 +351,6 @@ export class DispatchService {
       );
     }
 
-    // Status flow: ACCEPTED → EN_ROUTE → ARRIVED → PICKED_UP → AT_HOSPITAL → COMPLETED
     const validStatusFlow = {
       ACCEPTED: ["EN_ROUTE"],
       EN_ROUTE: ["ARRIVED"],

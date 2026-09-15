@@ -1,4 +1,4 @@
-// src/middleware/auth.middleware.ts
+
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt.js";
 import { AppError } from "./errorHandler.js";

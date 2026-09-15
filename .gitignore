@@ -14,3 +14,8 @@ build/
 .vscode/
 .idea/
 .prisma/
+.agent/
+.agents/
+.claude/
+.gemini/
+.windsurf/

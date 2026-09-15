@@ -1,11 +1,12 @@
 // src/routes/index.ts
 import { Router } from "express";
 
-const router = Router();
 
+const router = Router();
 
 const apiV1 = "/api/v1";
 
+// HEALTH CHECK
 
 router.get(`${apiV1}/health`, (req, res) => {
   res.json({
@@ -15,6 +16,10 @@ router.get(`${apiV1}/health`, (req, res) => {
   });
 });
 
+// AUTH ROUTES
 
+
+
+// PLACEHOLDER ROUTES
 
 export default router;
