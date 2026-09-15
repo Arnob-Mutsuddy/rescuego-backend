@@ -1,6 +1,9 @@
 // src/routes/index.ts
 import { Router } from "express";
-
+import authRoutes from "./auth.routes.js";
+import patientRoutes from "@/routes/patient.routes.js";
+import driverRoutes from "@/routes/driver.routes.js";
+import dispatchRoutes from "./dispatch.routes.js";
 
 const router = Router();
 
@@ -18,7 +21,19 @@ router.get(`${apiV1}/health`, (req, res) => {
 
 // AUTH ROUTES
 
+router.use(`${apiV1}/auth`, authRoutes);
 
+// PATIENT ROUTES
+
+router.use(`${apiV1}/patient`, patientRoutes);
+
+// DRIVER ROUTES
+
+router.use(`${apiV1}/driver`, driverRoutes);
+
+// DISPATCH ROUTES
+
+router.use(`${apiV1}/dispatch`, dispatchRoutes);
 
 // PLACEHOLDER ROUTES
 
