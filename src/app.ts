@@ -7,21 +7,27 @@ import corsOptions from "./config/cors.js";
 import { logger } from "./middleware/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import routes from "./routes/index.js";
+import { PaymentController } from "./controllers/payment.controller.js";
 
 const app: Express = express();
+const paymentController = new PaymentController();
 
 // SECURITY MIDDLEWARE
 app.use(helmet());
 app.use(cors(corsOptions));
+app.post(
+  "/api/v1/payments/webhook",
+  express.raw({ type: "application/json" }),
+  (req, res, next) => paymentController.handleWebhook(req, res, next)
+);
 
-// BODY PARSER
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-// LOGGING
+
 app.use(logger);
 
-// HEALTH CHECK
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -31,10 +37,8 @@ app.get("/", (req, res) => {
   });
 });
 
-// ROUTES
 app.use(routes);
 
-// 404 HANDLER
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -42,7 +46,6 @@ app.use((req, res) => {
   });
 });
 
-// ERROR HANDLER
 app.use(errorHandler);
 
 export default app;

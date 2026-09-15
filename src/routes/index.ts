@@ -4,6 +4,7 @@ import authRoutes from "./auth.routes.js";
 import patientRoutes from "@/routes/patient.routes.js";
 import driverRoutes from "@/routes/driver.routes.js";
 import dispatchRoutes from "./dispatch.routes.js";
+import paymentRoutes from "./payment.routes.js";
 
 const router = Router();
 
@@ -31,10 +32,8 @@ router.use(`${apiV1}/patient`, patientRoutes);
 
 router.use(`${apiV1}/driver`, driverRoutes);
 
-// DISPATCH ROUTES
-
 router.use(`${apiV1}/dispatch`, dispatchRoutes);
 
-// PLACEHOLDER ROUTES
+router.use(`${apiV1}/payments`, paymentRoutes);
 
 export default router;
