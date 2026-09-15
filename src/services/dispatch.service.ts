@@ -287,7 +287,7 @@ export class DispatchService {
   }
 
   /**
-   * Driver emergency request reject 
+   * Driver emergency request reject
    */
   async rejectDispatch(emergencyRequestId: string, driverId: string) {
     const emergency = await prisma.emergencyRequest.findUnique({
