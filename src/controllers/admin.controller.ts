@@ -39,6 +39,22 @@ export class AdminController {
       next(error);
     }
   }
+    async toggleUserStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const adminUserId = (req as any).userId;
+      const { id } = req.params;
+
+      const updated = await adminService.toggleUserStatus(id as string, adminUserId);
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: `User ${updated.isActive ? "activated" : "deactivated"} successfully`,
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
 
 

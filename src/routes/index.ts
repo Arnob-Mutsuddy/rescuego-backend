@@ -11,8 +11,6 @@ const router = Router();
 
 const apiV1 = "/api/v1";
 
-// HEALTH CHECK
-
 router.get(`${apiV1}/health`, (req, res) => {
   res.json({
     success: true,
@@ -21,15 +19,13 @@ router.get(`${apiV1}/health`, (req, res) => {
   });
 });
 
-// AUTH ROUTES
+
 
 router.use(`${apiV1}/auth`, authRoutes);
 
-// PATIENT ROUTES
 
 router.use(`${apiV1}/patient`, patientRoutes);
 
-// DRIVER ROUTES
 
 router.use(`${apiV1}/driver`, driverRoutes);
 
