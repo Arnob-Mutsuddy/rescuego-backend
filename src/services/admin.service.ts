@@ -205,6 +205,92 @@ export class AdminService {
 
     return updated;
   }
+
+
+//hopital
+
+
+   async createHospital(data: {
+    name: string;
+    phone: string;
+    email?: string;
+    address: string;
+    website?: string;
+    latitude: number;
+    longitude: number;
+    capacity: number;
+    operatingHours?: string;
+  }) {
+    const hospital = await prisma.hospital.create({ data });
+    return hospital;
+  }
+
+  async getAllHospitals(options: { page?: number; limit?: number } = {}) {
+    const page = Math.max(1, options.page || 1);
+    const limit = Math.min(options.limit || 10, 50);
+    const skip = (page - 1) * limit;
+
+    const hospitals = await prisma.hospital.findMany({
+      where: { deletedAt: null },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    });
+
+    const total = await prisma.hospital.count({ where: { deletedAt: null } });
+
+    return {
+      data: hospitals,
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+    };
+  }
+
+  async updateHospital(
+    hospitalId: string,
+    data: Partial< {
+      name: string;
+      phone: string;
+      email: string;
+      address: string;
+      website: string;
+      latitude: number;
+      longitude: number;
+      capacity: number;
+      operatingHours: string;
+    }  >
+  ) {
+    const hospital = await prisma.hospital.findUnique({
+      where: { id: hospitalId },
+    });
+
+    if (!hospital) {
+      throw new AppError("Hospital not found", HTTP_STATUS.NOT_FOUND);
+    }
+
+    const updated = await prisma.hospital.update({
+      where: { id: hospitalId },
+      data,
+    });
+
+    return updated;
+  }
+
+  async deleteHospital(hospitalId: string) {
+    const hospital = await prisma.hospital.findUnique({
+      where: { id: hospitalId },
+    });
+
+    if (!hospital) {
+      throw new AppError("Hospital not found", HTTP_STATUS.NOT_FOUND);
+    }
+
+    await prisma.hospital.update({
+      where: { id: hospitalId },
+      data: { deletedAt: new Date() },
+    });
+
+    return { message: "Hospital deleted successfully" };
+  }
   
 
 

@@ -112,6 +112,72 @@ export class AdminController {
     }
   }
 
+  //hospital
+    async createHospital(req: Request, res: Response, next: NextFunction) {
+    try {
+      const validated = createHospitalSchema.parse(req.body);
+      const hospital = await adminService.createHospital(validated);
+
+      res.status(HTTP_STATUS.CREATED).json({
+        success: true,
+        message: "Hospital created successfully",
+        data: hospital,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAllHospitals(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const result = await adminService.getAllHospitals({ page, limit });
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Hospitals fetched successfully",
+        data: result.data,
+        pagination: result.pagination,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateHospital(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const validated = updateHospitalSchema.parse(req.body);
+
+      const updated = await adminService.updateHospital(id as string, validated);
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Hospital updated successfully",
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteHospital(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const result = await adminService.deleteHospital(id as string);
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: result.message,
+        data: null,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
 
 
 
