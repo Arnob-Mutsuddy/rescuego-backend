@@ -374,6 +374,40 @@ export class AdminService {
 
     return { message: "Hospital deleted successfully" };
   }
+
+
+    async getAllEmergencyRequests(options: {page?: number; limit?: number; status?: string; severity?: string;} = {}) {
+    const page = Math.max(1, options.page || 1);
+    const limit = Math.min(options.limit || 10, 50);
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (options.status) where.status = options.status;
+    if (options.severity) where.severity = options.severity;
+
+    const requests = await prisma.emergencyRequest.findMany({
+      where,
+      include: {
+        patient: {
+          include: { user: { select: { fullName: true, phone: true } } },
+        },
+        driver: {
+          include: { user: { select: { fullName: true, phone: true } } },
+        },
+        hospital: { select: { name: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    });
+
+    const total = await prisma.emergencyRequest.count({ where });
+
+    return {
+      data: requests,
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+    };
+  }
   
 
   

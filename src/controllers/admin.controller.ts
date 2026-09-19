@@ -21,7 +21,7 @@ const updateHospitalSchema = createHospitalSchema.partial();
 
 export class AdminController {
 
-    
+
     async getDashboardStats(req: Request, res: Response, next: NextFunction) {
     try {
       const stats = await adminService.getDashboardStats();
@@ -195,8 +195,51 @@ export class AdminController {
     }
   }
 
+    async getAuditLogs(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const action = req.query.action as string | undefined;
 
+      const result = await adminService.getAuditLogs({ page, limit, action });
 
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Audit logs fetched successfully",
+        data: result.data,
+        pagination: result.pagination,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
+    async getAllEmergencyRequests(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const status = req.query.status as string | undefined;
+      const severity = req.query.severity as string | undefined;
 
+      const result = await adminService.getAllEmergencyRequests({
+        page,
+        limit,
+        status,
+        severity,
+      });
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Emergency requests fetched successfully",
+        data: result.data,
+        pagination: result.pagination,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
+
+
+
+

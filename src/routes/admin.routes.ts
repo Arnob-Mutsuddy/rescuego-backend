@@ -54,7 +54,13 @@ router.delete("/hospitals/:id", (req, res, next) =>
   adminController.deleteHospital(req, res, next)
 );
 
+router.get("/audit-logs", (req, res, next) =>
+  adminController.getAuditLogs(req, res, next)
+);
 
+router.get("/emergency-requests", (req, res, next) =>
+  adminController.getAllEmergencyRequests(req, res, next)
+);
 
 
 export default router;
