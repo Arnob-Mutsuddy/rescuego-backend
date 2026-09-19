@@ -14,7 +14,19 @@ router.use(authenticate, authorize("ADMIN"));
 
 router.get("/users", (req, res, next) =>
   adminController.getAllUsers(req, res, next)
-);  
+);
+
+router.patch("/users/:id/toggle-status", (req, res, next) =>
+  adminController.toggleUserStatus(req, res, next)
+);
+
+router.get("/drivers", (req, res, next) =>
+  adminController.getAllDrivers(req, res, next)
+);
+
+router.patch("/drivers/:id/approve", (req, res, next) =>
+  adminController.approveDriver(req, res, next)
+);
 
 
 

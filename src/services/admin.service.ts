@@ -128,6 +128,60 @@ export class AdminService {
     return updated;
   }
 
+    async getAllDrivers(options: {page?: number; limit?: number; isApproved?: boolean;} = {}) {
+    const page = Math.max(1, options.page || 1);
+    const limit = Math.min(options.limit || 10, 50);
+    const skip = (page - 1) * limit;
+
+    const where: any = { deletedAt: null };
+    if (options.isApproved !== undefined) {
+      where.isApproved = options.isApproved;
+    }
+
+    const drivers = await prisma.driver.findMany({
+      where,
+      include: {
+        user: {
+          select: { fullName: true, email: true, phone: true },
+        },
+        ambulances: {
+          where: { deletedAt: null },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
+    });
+
+    const total = await prisma.driver.count({ where });
+
+    return {
+      data: drivers,
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+    };
+  }
+
+  async approveDriver(driverId: string, adminUserId: string) {
+    const driver = await prisma.driver.findUnique({ where: { id: driverId } });
+
+    if (!driver) {
+      throw new AppError("Driver not found", HTTP_STATUS.NOT_FOUND);
+    }
+
+    const updated = await prisma.driver.update({
+      where: { id: driverId },
+      data: { isApproved: true },
+      include: {
+        user: { select: { fullName: true, email: true } },
+      },
+    });
+
+    await this.createAuditLog(adminUserId, "APPROVE_DRIVER", "Driver", driverId);
+
+    return updated;
+  }
+  
+
 
 
 

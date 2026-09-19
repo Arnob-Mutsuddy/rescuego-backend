@@ -20,7 +20,7 @@ const createHospitalSchema = z.object({
 const updateHospitalSchema = createHospitalSchema.partial();
 
 export class AdminController {
-      async getAllUsers(req: Request, res: Response, next: NextFunction) {
+    async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
@@ -49,6 +49,44 @@ export class AdminController {
       res.status(HTTP_STATUS.OK).json({
         success: true,
         message: `User ${updated.isActive ? "activated" : "deactivated"} successfully`,
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+    async getAllDrivers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const isApproved =
+        req.query.isApproved !== undefined
+          ? req.query.isApproved === "true"
+          : undefined;
+
+      const result = await adminService.getAllDrivers({ page, limit, isApproved });
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Drivers fetched successfully",
+        data: result.data,
+        pagination: result.pagination,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async approveDriver(req: Request, res: Response, next: NextFunction) {
+    try {
+      const adminUserId = (req as any).userId;
+      const { id } = req.params;
+
+      const updated = await adminService.approveDriver(id as string, adminUserId);
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Driver approved successfully",
         data: updated,
       });
     } catch (error) {
