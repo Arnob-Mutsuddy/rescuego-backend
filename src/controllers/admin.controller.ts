@@ -20,6 +20,23 @@ const createHospitalSchema = z.object({
 const updateHospitalSchema = createHospitalSchema.partial();
 
 export class AdminController {
+
+    
+    async getDashboardStats(req: Request, res: Response, next: NextFunction) {
+    try {
+      const stats = await adminService.getDashboardStats();
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Dashboard statistics fetched successfully",
+        data: stats,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
     async getAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const page = parseInt(req.query.page as string) || 1;

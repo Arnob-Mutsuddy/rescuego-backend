@@ -3,7 +3,90 @@ import { AppError } from "../middleware/errorHandler.js";
 import { HTTP_STATUS } from "../config/constants.js";
 
 export class AdminService {
-        async createAuditLog(
+
+    //dashbard stats
+    async getDashboardStats() {
+    const totalUsers = await prisma.user.count({ 
+        where: {
+            deletedAt: null 
+            } 
+    });
+    const totalPatients = await prisma.patient.count({ 
+        where: {
+             deletedAt: null 
+            } 
+    });
+    const totalDrivers = await prisma.driver.count({ 
+        where: {    
+             deletedAt: null 
+            } 
+    });
+    const approvedDrivers = await prisma.driver.count({
+      where: {
+         deletedAt: null, 
+         isApproved: true },
+    });
+    const availableDrivers = await prisma.driver.count({
+      where: {  
+        deletedAt: null, 
+        isAvailable: true },
+    });
+
+    const totalEmergencies = await prisma.emergencyRequest.count();
+    const pendingEmergencies = await prisma.emergencyRequest.count({
+      where: { 
+        status: "PENDING" 
+    },
+    });
+    const activeEmergencies = await prisma.emergencyRequest.count({
+      where: {
+        status: {
+          in: ["ASSIGNED", "ACCEPTED", "EN_ROUTE", "ARRIVED", "PATIENT_PICKED_UP", "AT_HOSPITAL"],
+        },
+      },
+    });
+    const completedEmergencies = await prisma.emergencyRequest.count({
+      where: {   
+        status: "COMPLETED" 
+    },
+    });
+
+    const totalRevenue = await prisma.payment.aggregate({
+      where: { 
+        status: "SUCCESS" },
+      _sum: { amount: true },
+    });
+
+    const totalHospitals = await prisma.hospital.count({ where: { deletedAt: null } });
+
+    return {
+      users: {
+        total: totalUsers,
+        patients: totalPatients,
+        drivers: totalDrivers,
+      },
+      drivers: {
+        total: totalDrivers,
+        approved: approvedDrivers,
+        available: availableDrivers,
+      },
+      emergencies: {
+        total: totalEmergencies,
+        pending: pendingEmergencies,
+        active: activeEmergencies,
+        completed: completedEmergencies,
+      },
+      revenue: {
+        total: totalRevenue._sum.amount || 0,
+      },
+      hospitals: totalHospitals,
+    };
+  }
+
+  //audıt log
+
+
+    async createAuditLog(
         userId: string,
         action: string,
         resource: string,
@@ -291,6 +374,8 @@ export class AdminService {
 
     return { message: "Hospital deleted successfully" };
   }
+  
+
   
 
 

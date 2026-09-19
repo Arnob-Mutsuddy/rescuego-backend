@@ -8,9 +8,9 @@ const adminController = new AdminController();
 
 router.use(authenticate, authorize("ADMIN"));
 
-// router.get("/dashboard-stats", (req, res, next) =>
-//   adminController.getDashboardStats(req, res, next)
-// );
+router.get("/dashboard-stats", (req, res, next) =>
+  adminController.getDashboardStats(req, res, next)
+);
 
 router.get("/users", (req, res, next) =>
   adminController.getAllUsers(req, res, next)
