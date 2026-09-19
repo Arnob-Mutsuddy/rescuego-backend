@@ -180,6 +180,31 @@ export class AdminService {
 
     return updated;
   }
+
+
+
+    async rejectDriver(driverId: string, adminUserId: string, reason?: string) {
+    const driver = await prisma.driver.findUnique({ where: { id: driverId } });
+
+    if (!driver) {
+      throw new AppError("Driver not found", HTTP_STATUS.NOT_FOUND);
+    }
+
+    const updated = await prisma.driver.update({
+      where: { id: driverId },
+      data: { isApproved: false },
+    });
+
+    await this.createAuditLog(
+      adminUserId,
+      "REJECT_DRIVER",
+      "Driver",
+      driverId,
+      { reason }
+    );
+
+    return updated;
+  }
   
 
 

@@ -19,4 +19,5 @@ router.get("/me", authenticate, (req, res, next) =>
   authController.getMe(req, res, next)
 );
 
+
 export default router;

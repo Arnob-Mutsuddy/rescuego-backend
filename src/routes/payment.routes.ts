@@ -1,4 +1,4 @@
-// src/routes/payment.routes.ts
+
 import { Router } from "express";
 import { PaymentController } from "../controllers/payment.controller.js";
 import { authenticate, authorize } from "../middleware/auth.middleware.js";

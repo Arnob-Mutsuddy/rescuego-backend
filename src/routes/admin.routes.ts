@@ -29,5 +29,10 @@ router.patch("/drivers/:id/approve", (req, res, next) =>
 );
 
 
+router.patch("/drivers/:id/reject", (req, res, next) =>
+  adminController.rejectDriver(req, res, next)
+);
+
+
 
 export default router;

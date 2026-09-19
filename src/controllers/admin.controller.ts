@@ -94,6 +94,25 @@ export class AdminController {
     }
   }
 
+    async rejectDriver(req: Request, res: Response, next: NextFunction) {
+    try {
+      const adminUserId = (req as any).userId;
+      const { id } = req.params;
+      const { reason } = req.body;
+
+      const updated = await adminService.rejectDriver(id as string, adminUserId, reason);
+
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Driver rejected",
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
 
 
 
