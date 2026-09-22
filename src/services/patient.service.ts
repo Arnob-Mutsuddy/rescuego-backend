@@ -1,4 +1,4 @@
-// src/services/patient.service.ts
+
 import prisma from "../config/database.js";
 import { AppError } from "../middleware/errorHandler.js";
 import { HTTP_STATUS } from "../config/constants.js";

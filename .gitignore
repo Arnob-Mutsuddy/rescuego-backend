@@ -19,3 +19,7 @@ build/
 .claude/
 .gemini/
 .windsurf/
+.node_modules
+prisma/generated/
+.vercel
+.vercel

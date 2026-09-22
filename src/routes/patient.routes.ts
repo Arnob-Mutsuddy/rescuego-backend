@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { authenticate } from "../middleware/auth.middleware.js";
-import { PatientController } from "@/controllers/patient.controller.js";
+import { PatientController } from "../controllers/patient.controller.js";
 
 const router = Router();
 const patientController = new PatientController();

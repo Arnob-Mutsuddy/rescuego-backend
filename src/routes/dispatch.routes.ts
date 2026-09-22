@@ -1,7 +1,7 @@
 
 import { Router } from "express";
-import { DispatchController } from "@/controllers/dispatch.controller.js";
-import { authenticate, authorize } from "@/middleware/auth.middleware";
+import { DispatchController } from "../controllers/dispatch.controller.js";
+import { authenticate, authorize } from "../middleware/auth.middleware.js";
 
 
 const router = Router();

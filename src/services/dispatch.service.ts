@@ -1,9 +1,15 @@
 
-import prisma from "@/config/database.js";
-import { AppError } from "@/middleware/errorHandler.js";
-import { HTTP_STATUS } from "@/config/constants.js";
-import { calculateDistance, estimateTime } from "@/utils/distance.js";
+// import prisma from "@/config/database.js";
+// import { AppError } from "@/middleware/errorHandler.js";
+// import { HTTP_STATUS } from "@/config/constants.js";
+// import { calculateDistance, estimateTime } from "@/utils/distance.js";
+import prisma from "../config/database.js";
 
+import { AppError } from "../middleware/errorHandler.js";
+
+import { HTTP_STATUS } from "../config/constants.js";
+
+import { calculateDistance, estimateTime } from "../utils/distance.js";
 export class DispatchService {
   /**
     Emergency request nearest available ambulances find

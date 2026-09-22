@@ -1,4 +1,4 @@
-// src/utils/password.ts
+
 import bcrypt from "bcryptjs";
 import config from "../config/env.js";
 

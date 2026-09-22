@@ -2,7 +2,7 @@
 import { Router } from "express";
 
 import { authenticate } from "../middleware/auth.middleware.js";
-import { DriverController } from "@/controllers/driver.controller.js";
+import { DriverController } from "../controllers/driver.controller.js";
 
 const router = Router();
 const driverController = new DriverController();
