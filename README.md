@@ -1,39 +1,25 @@
-# RESCUEGO — Ambulance Dispatch & Emergency Management System
+# RESCUEGO - Ambulance Dispatch & Emergency Management System
 
 RESCUEGO is a backend-heavy REST API for real-time ambulance dispatching. Patients can raise emergency requests with their live GPS location, the system finds and assigns the nearest available ambulance using the Haversine distance formula, drivers accept/track the trip through a full status lifecycle, and payment is settled through Stripe once the trip is completed.
 
-Built for the **B7A6 Backend Project Assignment**.
-
 ---
 
-## Table of Contents
-
-- [Problem Domain](#-problem-domain)
-- [Tech Stack](#-tech-stack)
-- [User Roles](#-user-roles)
-- [Core Workflow](#-core-workflow)
-- [Database Design](#-database-design)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Environment Variables](#-environment-variables)
-- [API Overview](#-api-overview)
-- [Nearest Ambulance Algorithm](#-nearest-ambulance-algorithm)
-- [Payment Flow (Stripe)](#-payment-flow-stripe)
-- [API Documentation](#-api-documentation)
-- [Admin Demo Credentials](#-admin-demo-credentials)
-- [Deployment](#-deployment)
-- [Live API](#-live-api)
-
----
 
 ## Problem Domain
 
-Emergency ambulance response in many cities is slow and manual — patients call around, dispatchers guess which ambulance is closest, and there's no live tracking or digital record of the trip. RESCUEGO solves this by:
+Emergency ambulance response in many cities is slow and manual - patients call around, dispatchers guess which ambulance is closest, and there's no live tracking or digital record of the trip. RESCUEGO solves this by:
 
 - Letting a patient raise an emergency request with one tap, sharing live GPS coordinates
 - Automatically locating the nearest **available, approved** ambulance using real driver GPS history
 - Giving drivers a clear accept/reject flow and a step-by-step trip status pipeline
 - Recording every trip, payment, and admin action for accountability (audit logs)
+
+---
+
+## Live API
+
+- **Live API URL:** [Rescuego](https://rescuego-backend.vercel.app)
+- **Postman Docs:** [POSTMAN](https://documenter.getpostman.com/view/54724313/2sBYB2r7H2)
 
 ---
 
@@ -80,7 +66,7 @@ RESCUEGO has **3 fixed roles**, each with strictly separated permissions:
 ---
 
 **Emergency status lifecycle:**
-`PENDING → ASSIGNED → ACCEPTED → EN_ROUTE → ARRIVED → PATIENT_PICKED_UP → AT_HOSPITAL → COMPLETED` (or `CANCELLED` from PENDING/ASSIGNED)
+`PENDING -> ASSIGNED -> ACCEPTED -> EN_ROUTE -> ARRIVED -> PATIENT_PICKED_UP -> AT_HOSPITAL -> COMPLETED` (or `CANCELLED` from PENDING/ASSIGNED)
 
 ---
 
@@ -88,13 +74,13 @@ RESCUEGO has **3 fixed roles**, each with strictly separated permissions:
 
 Key entities and relationships (PostgreSQL + Prisma):
 
-- **User** — base account (email, password, phone, role) → one-to-one with Patient / Driver / Admin
-- **Patient** — medical info, emergency contact → has many EmergencyRequests, Payments, Reviews
-- **Driver** — license info, `isApproved`, `isAvailable` → has many Ambulances, DriverLocations, Trips
-- **Ambulance** — registration, type, capacity, equipment (owned by a Driver)
-- **DriverLocation** — GPS history (lat/lng/accuracy), one row per location ping — used to resolve "current location" via `ORDER BY createdAt DESC LIMIT 1`
-- **Hospital** — name, address, coordinates, capacity
-- **EmergencyRequest** — the core entity: patient location, severity, status, assigned driver/hospital
+- **User** - base account (email, password, phone, role) - one-to-one with Patient / Driver / Admin
+- **Patient** - medical info, emergency contact - has many EmergencyRequests, Payments, Reviews
+- **Driver** - license info, isApproved, isAvailable - has many Ambulances, DriverLocations, Trips
+- **Ambulance** - registration, type, capacity, equipment (owned by a Driver)
+- **DriverLocation** - GPS history (lat/lng/accuracy), one row per location ping - used to resolve "current location" via ORDER BY createdAt DESC LIMIT 1
+- **Hospital** - name, address, coordinates, capacity
+- **EmergencyRequest** - the core entity: patient location, severity, status, assigned driver/hospital
 - **Trip** — created once a driver accepts; tracks distance, fare, and status timestamps
 - **Payment** — Stripe session/payment intent, amount, status
 - **Review** — patient's rating (1–5) + sub-ratings (cleanliness, professionalism, communication) for a driver
@@ -285,11 +271,6 @@ Deployed as Vercel Serverless Functions:
 - A separate production Stripe webhook endpoint is configured in the Stripe Dashboard pointing at the deployed `/api/v1/payments/webhook` URL
 
 ---
-
-## Live API
-
-- **Live API URL:** [Rescuego](https://rescuego-backend.vercel.app)
-- **Postman Docs:** [POSTMAN](https://documenter.getpostman.com/view/54724313/2sBYB2r7H2)
 
 
 
