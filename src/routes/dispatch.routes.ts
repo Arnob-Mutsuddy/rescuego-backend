@@ -8,8 +8,19 @@ const router = Router();
 const dispatchController = new DispatchController();
 
 
-router.post("/find-nearest", authenticate, authorize("ADMIN"), (req, res, next) => dispatchController.findNearestAmbulances(req, res, next));
+router.post(
+  "/find-nearest",
+  authenticate,
+  authorize("ADMIN"),
+  (req, res, next) => dispatchController.findNearestAmbulances(req, res, next)
+);
 
+router.post(
+  "/find-nearest-for-emergency",
+  authenticate,
+  authorize("ADMIN"),
+  (req, res, next) => dispatchController.findNearestForEmergency(req, res, next) 
+);
 
 router.post("/assign", authenticate,
   authorize("ADMIN"),

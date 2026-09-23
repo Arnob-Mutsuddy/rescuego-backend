@@ -12,12 +12,21 @@ const findNearestSchema = z.object({
   patientLng: z.number().min(-180).max(180),
   limit: z.number().min(1).max(10).optional(),
 });
+const findNearestForEmergencySchema = z.object({
+  emergencyRequestId: z.string(),
+  limit: z.number().min(1).max(10).optional(),
+});
 
+// const assignEmergencySchema = z.object({
+//   emergencyRequestId: z.string(),
+//   driverId: z.string(),
+//   patientLat: z.number().min(-90).max(90),
+//   patientLng: z.number().min(-180).max(180),
+//   hospitalId: z.string(),
+// });
 const assignEmergencySchema = z.object({
   emergencyRequestId: z.string(),
   driverId: z.string(),
-  patientLat: z.number().min(-90).max(90),
-  patientLng: z.number().min(-180).max(180),
   hospitalId: z.string(),
 });
 
@@ -55,27 +64,67 @@ export class DispatchController {
     }
   }
 
-  async assignEmergency(req: Request, res: Response, next: NextFunction) {
-    try {
-      const validated = assignEmergencySchema.parse(req.body);
 
-      const assigned = await dispatchService.assignEmergency(
-        validated.emergencyRequestId,
-        validated.driverId,
-        validated.patientLat,
-        validated.patientLng,
-        validated.hospitalId
-      );
+  async findNearestForEmergency(req: Request, res: Response, next: NextFunction) {
+  try {
+    const validated = findNearestForEmergencySchema.parse(req.body);
 
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: "Emergency assigned to driver",
-        data: assigned,
-      });
-    } catch (error) {
-      next(error);
-    }
+    const result = await dispatchService.findNearestForEmergency(
+      validated.emergencyRequestId,
+      validated.limit || 5
+    );
+
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: "Nearest ambulances found",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
   }
+}
+  
+
+  // async assignEmergency(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const validated = assignEmergencySchema.parse(req.body);
+
+  //     const assigned = await dispatchService.assignEmergency(
+  //       validated.emergencyRequestId,
+  //       validated.driverId,
+  //       validated.patientLat,
+  //       validated.patientLng,
+  //       validated.hospitalId
+  //     );
+
+  //     res.status(HTTP_STATUS.OK).json({
+  //       success: true,
+  //       message: "Emergency assigned to driver",
+  //       data: assigned,
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
+  async assignEmergency(req: Request, res: Response, next: NextFunction) {
+  try {
+    const validated = assignEmergencySchema.parse(req.body);
+
+    const assigned = await dispatchService.assignEmergency(
+      validated.emergencyRequestId,
+      validated.driverId,
+      validated.hospitalId
+    );
+
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: "Emergency assigned to driver",
+      data: assigned,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
   async acceptDispatch(req: Request, res: Response, next: NextFunction) {
     try {

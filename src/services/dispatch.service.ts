@@ -93,117 +93,244 @@ export class DispatchService {
     return driversWithDistance;
   }
 
+  // Emergency request nearest available ambulances find
+  async findNearestForEmergency(emergencyRequestId: string, limit: number = 5) {
+  const emergency = await prisma.emergencyRequest.findUnique({
+    where: { id: emergencyRequestId },
+  });
+
+  if (!emergency) {
+    throw new AppError("Emergency request not found", HTTP_STATUS.NOT_FOUND);
+  }
+
+  if (emergency.status !== "PENDING") {
+    throw new AppError(
+      "This emergency request is not pending",
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+
+  // lat/lng database take
+  const ambulances = await this.findNearestAmbulances(
+    emergency.patientLat,
+    emergency.patientLng,
+    limit
+  );
+
+  return { emergency, ambulances };
+}
+
   /**
    * Emergency request driver assign
    */
-  async assignEmergency(
-    emergencyRequestId: string,
-    driverId: string,
-    patientLat: number,
-    patientLng: number,
-    hospitalId: string
-  ) {
-    // Check emergency request exists and is PENDING
-    const emergency = await prisma.emergencyRequest.findUnique({
-      where: { id: emergencyRequestId },
-    });
+  // async assignEmergency(
+  //   emergencyRequestId: string,
+  //   driverId: string,
+  //   patientLat: number,
+  //   patientLng: number,
+  //   hospitalId: string
+  // ) {
+  //   // Check emergency request exists and is PENDING
+  //   const emergency = await prisma.emergencyRequest.findUnique({
+  //     where: { id: emergencyRequestId },
+  //   });
 
-    if (!emergency) {
-      throw new AppError("Emergency request not found", HTTP_STATUS.NOT_FOUND);
-    }
+  //   if (!emergency) {
+  //     throw new AppError("Emergency request not found", HTTP_STATUS.NOT_FOUND);
+  //   }
 
-    if (emergency.status !== "PENDING") {
-      throw new AppError(
-        "Emergency request already assigned",
-        HTTP_STATUS.BAD_REQUEST
-      );
-    }
+  //   if (emergency.status !== "PENDING") {
+  //     throw new AppError(
+  //       "Emergency request already assigned",
+  //       HTTP_STATUS.BAD_REQUEST
+  //     );
+  //   }
 
-    // Check driver exists and is available
-    const driver = await prisma.driver.findUnique({
-      where: { id: driverId },
-      include: {
-        ambulances: {
-          where: { status: "ACTIVE", deletedAt: null },
-        },
-        locations: {
-          orderBy: { createdAt: "desc" },
-          take: 1,
-        },
-      },
-    });
+  //   // Check driver exists and is available
+  //   const driver = await prisma.driver.findUnique({
+  //     where: { id: driverId },
+  //     include: {
+  //       ambulances: {
+  //         where: { status: "ACTIVE", deletedAt: null },
+  //       },
+  //       locations: {
+  //         orderBy: { createdAt: "desc" },
+  //         take: 1,
+  //       },
+  //     },
+  //   });
 
-    if (!driver) {
-      throw new AppError("Driver not found", HTTP_STATUS.NOT_FOUND);
-    }
+  //   if (!driver) {
+  //     throw new AppError("Driver not found", HTTP_STATUS.NOT_FOUND);
+  //   }
 
-    if (!driver.isAvailable || !driver.isApproved) {
-      throw new AppError("Driver is not available", HTTP_STATUS.BAD_REQUEST);
-    }
+  //   if (!driver.isAvailable || !driver.isApproved) {
+  //     throw new AppError("Driver is not available", HTTP_STATUS.BAD_REQUEST);
+  //   }
 
-    if (driver.ambulances.length === 0) {
-      throw new AppError(
-        "Driver has no active ambulance",
-        HTTP_STATUS.BAD_REQUEST
-      );
-    }
+  //   if (driver.ambulances.length === 0) {
+  //     throw new AppError(
+  //       "Driver has no active ambulance",
+  //       HTTP_STATUS.BAD_REQUEST
+  //     );
+  //   }
 
-    // Calculate distance
-    const driverLocation = driver.locations[0];
-    if (!driverLocation) {
-      throw new AppError("Driver location not available", HTTP_STATUS.BAD_REQUEST);
-    }
+  //   // Calculate distance
+  //   const driverLocation = driver.locations[0];
+  //   if (!driverLocation) {
+  //     throw new AppError("Driver location not available", HTTP_STATUS.BAD_REQUEST);
+  //   }
 
-    const distance = calculateDistance(
-      patientLat,
-      patientLng,
-      driverLocation.latitude,
-      driverLocation.longitude
-    );
+  //   const distance = calculateDistance(
+  //     patientLat,
+  //     patientLng,
+  //     driverLocation.latitude,
+  //     driverLocation.longitude
+  //   );
 
-    const estimatedTime = estimateTime(distance);
+  //   const estimatedTime = estimateTime(distance);
 
-    // Get hospital
-    const hospital = await prisma.hospital.findUnique({
-      where: { id: hospitalId },
-    });
+  //   // Get hospital
+  //   const hospital = await prisma.hospital.findUnique({
+  //     where: { id: hospitalId },
+  //   });
 
-    if (!hospital) {
-      throw new AppError("Hospital not found", HTTP_STATUS.NOT_FOUND);
-    }
+  //   if (!hospital) {
+  //     throw new AppError("Hospital not found", HTTP_STATUS.NOT_FOUND);
+  //   }
 
-    // Update emergency request status
-    const updated = await prisma.emergencyRequest.update({
-      where: { id: emergencyRequestId },
-      data: {
-        driverId,
-        status: "ASSIGNED",
-        hospitalId,
-        estimatedDistance: distance,
-        estimatedTime,
-        estimatedCost: Math.ceil((distance * 50) + 100), // baseFare + perKm
-      },
-      include: {
-        patient: {
-          include: {
-            user: {
-              select: { fullName: true, phone: true },
-            },
-          },
-        },
-        driver: {
-          include: {
-            user: {
-              select: { fullName: true, phone: true },
-            },
-          },
-        },
-        hospital: true,
-      },
-    });
+  //   // Update emergency request status
+  //   const updated = await prisma.emergencyRequest.update({
+  //     where: { id: emergencyRequestId },
+  //     data: {
+  //       driverId,
+  //       status: "ASSIGNED",
+  //       hospitalId,
+  //       estimatedDistance: distance,
+  //       estimatedTime,
+  //       estimatedCost: Math.ceil((distance * 50) + 100), // baseFare + perKm
+  //     },
+  //     include: {
+  //       patient: {
+  //         include: {
+  //           user: {
+  //             select: { fullName: true, phone: true },
+  //           },
+  //         },
+  //       },
+  //       driver: {
+  //         include: {
+  //           user: {
+  //             select: { fullName: true, phone: true },
+  //           },
+  //         },
+  //       },
+  //       hospital: true,
+  //     },
+  //   });
 
-    return updated;
+  //   return updated;
+  // }
+  /**
+ * Emergency request driver assign (lat/lng auto-fetch from emergency)
+ */
+async assignEmergency(
+  emergencyRequestId: string,
+  driverId: string,
+  hospitalId: string
+) {
+  // Check emergency request exists and is PENDING
+  const emergency = await prisma.emergencyRequest.findUnique({
+    where: { id: emergencyRequestId },
+  });
+
+  if (!emergency) {
+    throw new AppError("Emergency request not found", HTTP_STATUS.NOT_FOUND);
   }
+
+  if (emergency.status !== "PENDING") {
+    throw new AppError(
+      "Emergency request already assigned",
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+
+  const patientLat = emergency.patientLat;
+  const patientLng = emergency.patientLng;
+
+  const driver = await prisma.driver.findUnique({
+    where: { id: driverId },
+    include: {
+      ambulances: {
+        where: { status: "ACTIVE", deletedAt: null },
+      },
+      locations: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+    },
+  });
+
+  if (!driver) {
+    throw new AppError("Driver not found", HTTP_STATUS.NOT_FOUND);
+  }
+
+  if (!driver.isAvailable || !driver.isApproved) {
+    throw new AppError("Driver is not available", HTTP_STATUS.BAD_REQUEST);
+  }
+
+  if (driver.ambulances.length === 0) {
+    throw new AppError(
+      "Driver has no active ambulance",
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+
+  const driverLocation = driver.locations[0];
+  if (!driverLocation) {
+    throw new AppError("Driver location not available", HTTP_STATUS.BAD_REQUEST);
+  }
+
+  const distance = calculateDistance(
+    patientLat,
+    patientLng,
+    driverLocation.latitude,
+    driverLocation.longitude
+  );
+
+  const estimatedTime = estimateTime(distance);
+
+  const hospital = await prisma.hospital.findUnique({
+    where: { id: hospitalId },
+  });
+
+  if (!hospital) {
+    throw new AppError("Hospital not found", HTTP_STATUS.NOT_FOUND);
+  }
+
+  const updated = await prisma.emergencyRequest.update({
+    where: { id: emergencyRequestId },
+    data: {
+      driverId,
+      status: "ASSIGNED",
+      hospitalId,
+      estimatedDistance: distance,
+      estimatedTime,
+      estimatedCost: Math.ceil((distance * 50) + 100),
+    },
+    include: {
+      patient: {
+        include: { user: { select: { fullName: true, phone: true } } },
+      },
+      driver: {
+        include: { user: { select: { fullName: true, phone: true } } },
+      },
+      hospital: true,
+    },
+  });
+
+  return updated;
+}
 
   /**
    * Driver emergency request accept

@@ -2016,6 +2016,258 @@
               "body": "{\n  \"success\": true,\n  \"message\": \"Statistics fetched successfully\",\n  \"data\": {\n    \"PENDING\": 1\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "Create Emergency Request(test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "Create Emergency Request(test)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{patient_token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"emergencyType\": \"Accident\",\r\n  \"severity\": \"HIGH\",\r\n  \"patientLat\": 22.3569,\r\n  \"patientLng\": 91.7832,\r\n  \"patientAddress\": \"Test Location\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/patient/emergency/create",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "patient",
+                    "emergency",
+                    "create"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-security-policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-resource-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "origin-agent-cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "strict-transport-security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-dns-prefetch-control",
+                  "value": "off"
+                },
+                {
+                  "key": "x-download-options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "x-permitted-cross-domain-policies",
+                  "value": "none"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "926"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"39e-xEnHWji1oJWkWsf6S7F9Uq/yfPI\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 08:06:59 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Emergency request created successfully\",\n  \"data\": {\n    \"id\": \"cmudtksq900009wr8547f5ecz\",\n    \"patientId\": \"cmucuwd7c0004bkr8s1gvhpny\",\n    \"driverId\": null,\n    \"emergencyType\": \"Accident\",\n    \"severity\": \"HIGH\",\n    \"description\": null,\n    \"patientLat\": 22.3569,\n    \"patientLng\": 91.7832,\n    \"patientAddress\": \"Test Location\",\n    \"accuracy\": null,\n    \"hospitalId\": null,\n    \"status\": \"PENDING\",\n    \"estimatedDistance\": null,\n    \"estimatedTime\": null,\n    \"estimatedCost\": null,\n    \"createdAt\": \"2026-09-23T08:06:59.697Z\",\n    \"updatedAt\": \"2026-09-23T08:06:59.697Z\",\n    \"completedAt\": null,\n    \"cancelledAt\": null,\n    \"deletedAt\": null,\n    \"patient\": {\n      \"id\": \"cmucuwd7c0004bkr8s1gvhpny\",\n      \"userId\": \"cmucuwcej0003bkr89joj0fzm\",\n      \"dateOfBirth\": null,\n      \"bloodGroup\": \"B+\",\n      \"medicalHistory\": null,\n      \"emergencyContactName\": \"Arnob\",\n      \"emergencyContactPhone\": \"+880111222333\",\n      \"createdAt\": \"2026-09-22T15:56:12.888Z\",\n      \"updatedAt\": \"2026-09-22T16:11:46.061Z\",\n      \"deletedAt\": null,\n      \"user\": {\n        \"fullName\": \"Aronno Mutsuddy\",\n        \"phone\": \"+880123456719\"\n      }\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Emergency Req (by em_req_ID)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "name": "Get Emergency Req (by em_req_ID)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/patient/emergency/{{emergency_request_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "patient",
+                    "emergency",
+                    "{{emergency_request_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-security-policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-resource-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "origin-agent-cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "strict-transport-security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-dns-prefetch-control",
+                  "value": "off"
+                },
+                {
+                  "key": "x-download-options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "x-permitted-cross-domain-policies",
+                  "value": "none"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "983"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3d7-hmGdbm+jgJzgWUh3QZAOM1m/qzE\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 08:09:19 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Emergency request fetched successfully\",\n  \"data\": {\n    \"id\": \"cmudtksq900009wr8547f5ecz\",\n    \"patientId\": \"cmucuwd7c0004bkr8s1gvhpny\",\n    \"driverId\": null,\n    \"emergencyType\": \"Accident\",\n    \"severity\": \"HIGH\",\n    \"description\": null,\n    \"patientLat\": 22.3569,\n    \"patientLng\": 91.7832,\n    \"patientAddress\": \"Test Location\",\n    \"accuracy\": null,\n    \"hospitalId\": null,\n    \"status\": \"PENDING\",\n    \"estimatedDistance\": null,\n    \"estimatedTime\": null,\n    \"estimatedCost\": null,\n    \"createdAt\": \"2026-09-23T08:06:59.697Z\",\n    \"updatedAt\": \"2026-09-23T08:06:59.697Z\",\n    \"completedAt\": null,\n    \"cancelledAt\": null,\n    \"deletedAt\": null,\n    \"patient\": {\n      \"id\": \"cmucuwd7c0004bkr8s1gvhpny\",\n      \"userId\": \"cmucuwcej0003bkr89joj0fzm\",\n      \"dateOfBirth\": null,\n      \"bloodGroup\": \"B+\",\n      \"medicalHistory\": null,\n      \"emergencyContactName\": \"Arnob\",\n      \"emergencyContactPhone\": \"+880111222333\",\n      \"createdAt\": \"2026-09-22T15:56:12.888Z\",\n      \"updatedAt\": \"2026-09-22T16:11:46.061Z\",\n      \"deletedAt\": null,\n      \"user\": {\n        \"fullName\": \"Aronno Mutsuddy\",\n        \"phone\": \"+880123456719\"\n      }\n    },\n    \"driver\": null,\n    \"hospital\": null,\n    \"trip\": null,\n    \"payment\": null\n  }\n}"
+            }
+          ]
         }
       ]
     },
@@ -4772,6 +5024,175 @@
               "body": "{\n  \"success\": true,\n  \"message\": \"Trip status updated to COMPLETED\",\n  \"data\": {\n    \"trip\": {\n      \"id\": \"cmud29cnm000gbkr8tamc15kt\",\n      \"emergencyRequestId\": \"cmucvhdh10009bkr8l1aes2zn\",\n      \"driverId\": \"cmucuyh5k0006bkr8ddonfom3\",\n      \"ambulanceId\": \"cmuczrcab000abkr8utssmpej\",\n      \"hospitalId\": \"cmud27y4i000fbkr8nmvsqzqn\",\n      \"distance\": 0.11,\n      \"estimatedTime\": 1,\n      \"actualTime\": null,\n      \"baseFare\": 100,\n      \"perKmFare\": 50,\n      \"totalFare\": null,\n      \"acceptedAt\": \"2026-09-22T19:22:16.017Z\",\n      \"enRouteAt\": \"2026-09-22T19:24:05.597Z\",\n      \"arrivedAt\": \"2026-09-22T19:24:52.288Z\",\n      \"pickedUpAt\": \"2026-09-22T19:28:31.783Z\",\n      \"arrivedHospitalAt\": \"2026-09-22T19:29:48.759Z\",\n      \"completedAt\": \"2026-09-22T19:31:31.110Z\",\n      \"notes\": null,\n      \"cancellationReason\": null,\n      \"createdAt\": \"2026-09-22T19:22:16.018Z\",\n      \"updatedAt\": \"2026-09-22T19:31:31.161Z\",\n      \"emergencyRequest\": {\n        \"id\": \"cmucvhdh10009bkr8l1aes2zn\",\n        \"patientId\": \"cmucuwd7c0004bkr8s1gvhpny\",\n        \"driverId\": \"cmucuyh5k0006bkr8ddonfom3\",\n        \"emergencyType\": \"Accident\",\n        \"severity\": \"HIGH\",\n        \"description\": \"Car accident on Halishahar Road\",\n        \"patientLat\": 22.3569,\n        \"patientLng\": 91.7832,\n        \"patientAddress\": \"Chattogram Medical College\",\n        \"accuracy\": 15.5,\n        \"hospitalId\": \"cmud27y4i000fbkr8nmvsqzqn\",\n        \"status\": \"COMPLETED\",\n        \"estimatedDistance\": 0.11,\n        \"estimatedTime\": 1,\n        \"estimatedCost\": 106,\n        \"createdAt\": \"2026-09-22T16:12:33.013Z\",\n        \"updatedAt\": \"2026-09-22T19:31:13.521Z\",\n        \"completedAt\": \"2026-09-22T19:31:13.521Z\",\n        \"cancelledAt\": null,\n        \"deletedAt\": null\n      },\n      \"driver\": {\n        \"id\": \"cmucuyh5k0006bkr8ddonfom3\",\n        \"userId\": \"cmucuygrv0005bkr83ndzqu8t\",\n        \"licenseNumber\": \"CTG-DL-123456\",\n        \"licenseExpiry\": \"2028-01-01T00:00:00.000Z\",\n        \"isApproved\": true,\n        \"isAvailable\": true,\n        \"dutyStartTime\": \"2026-09-22T18:36:47.770Z\",\n        \"dutyEndTime\": null,\n        \"yearsOfExperience\": 5,\n        \"certification\": null,\n        \"createdAt\": \"2026-09-22T15:57:51.320Z\",\n        \"updatedAt\": \"2026-09-22T18:36:47.824Z\",\n        \"deletedAt\": null,\n        \"user\": {\n          \"id\": \"cmucuygrv0005bkr83ndzqu8t\",\n          \"email\": \"driver@gmail.com\",\n          \"password\": \"$2b$10$1XaDxZi6wiwF/02a2lvVveJSYWx6w5uBrmxGypi6udA44wFg5hJZG\",\n          \"phone\": \"+880198715432\",\n          \"fullName\": \"Ali\",\n          \"role\": \"DRIVER\",\n          \"avatar\": null,\n          \"isActive\": true,\n          \"createdAt\": \"2026-09-22T15:57:50.827Z\",\n          \"updatedAt\": \"2026-09-22T15:57:50.827Z\",\n          \"deletedAt\": null\n        }\n      },\n      \"ambulance\": {\n        \"id\": \"cmuczrcab000abkr8utssmpej\",\n        \"driverId\": \"cmucuyh5k0006bkr8ddonfom3\",\n        \"registrationNo\": \"AMBUL-002\",\n        \"ambulanceType\": \"Advanced\",\n        \"capacity\": 2,\n        \"manufacturingYear\": 2023,\n        \"status\": \"ACTIVE\",\n        \"equipment\": [\n          \"Oxygen\",\n          \"Ventilator\",\n          \"Defibrillator\"\n        ],\n        \"createdAt\": \"2026-09-22T18:12:16.499Z\",\n        \"updatedAt\": \"2026-09-22T18:12:16.499Z\",\n        \"deletedAt\": null\n      },\n      \"hospital\": {\n        \"id\": \"cmud27y4i000fbkr8nmvsqzqn\",\n        \"name\": \"Chittagong General Hospital\",\n        \"phone\": \"+880312345678\",\n        \"email\": null,\n        \"address\": \"Chattogram, Bangladesh\",\n        \"website\": null,\n        \"latitude\": 22.362,\n        \"longitude\": 91.789,\n        \"capacity\": 300,\n        \"emergencyDepartment\": true,\n        \"operatingHours\": \"24/7\",\n        \"createdAt\": \"2026-09-22T19:21:10.530Z\",\n        \"updatedAt\": \"2026-09-22T19:21:10.530Z\",\n        \"deletedAt\": null\n      }\n    },\n    \"emergencyRequest\": {\n      \"id\": \"cmucvhdh10009bkr8l1aes2zn\",\n      \"patientId\": \"cmucuwd7c0004bkr8s1gvhpny\",\n      \"driverId\": \"cmucuyh5k0006bkr8ddonfom3\",\n      \"emergencyType\": \"Accident\",\n      \"severity\": \"HIGH\",\n      \"description\": \"Car accident on Halishahar Road\",\n      \"patientLat\": 22.3569,\n      \"patientLng\": 91.7832,\n      \"patientAddress\": \"Chattogram Medical College\",\n      \"accuracy\": 15.5,\n      \"hospitalId\": \"cmud27y4i000fbkr8nmvsqzqn\",\n      \"status\": \"COMPLETED\",\n      \"estimatedDistance\": 0.11,\n      \"estimatedTime\": 1,\n      \"estimatedCost\": 106,\n      \"createdAt\": \"2026-09-22T16:12:33.013Z\",\n      \"updatedAt\": \"2026-09-22T19:31:31.578Z\",\n      \"completedAt\": \"2026-09-22T19:31:31.578Z\",\n      \"cancelledAt\": null,\n      \"deletedAt\": null\n    }\n  }\n}"
             }
           ]
+        },
+        {
+          "name": "Find-Nearest-for-Emergency(auto)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"emergencyRequestId\": \"{{emergency_request_id}}\",\r\n  \"limit\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dispatch/find-nearest-for-emergency",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dispatch",
+                "find-nearest-for-emergency"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "find-nearest-for-emergency(auto)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{admin_token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"emergencyRequestId\": \"{{emergency_request_id}}\",\r\n  \"limit\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/dispatch/find-nearest-for-emergency",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "dispatch",
+                    "find-nearest-for-emergency"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-security-policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "cross-origin-opener-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "cross-origin-resource-policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "origin-agent-cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "referrer-policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "strict-transport-security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "x-content-type-options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "x-dns-prefetch-control",
+                  "value": "off"
+                },
+                {
+                  "key": "x-download-options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "x-frame-options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "x-permitted-cross-domain-policies",
+                  "value": "none"
+                },
+                {
+                  "key": "x-xss-protection",
+                  "value": "0"
+                },
+                {
+                  "key": "vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "access-control-allow-credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1155"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"483-mWNoMO3DwSLY5e5+oI7M8xRhfYU\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 08:10:17 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Nearest ambulances found\",\n  \"data\": {\n    \"emergency\": {\n      \"id\": \"cmudtksq900009wr8547f5ecz\",\n      \"patientId\": \"cmucuwd7c0004bkr8s1gvhpny\",\n      \"driverId\": null,\n      \"emergencyType\": \"Accident\",\n      \"severity\": \"HIGH\",\n      \"description\": null,\n      \"patientLat\": 22.3569,\n      \"patientLng\": 91.7832,\n      \"patientAddress\": \"Test Location\",\n      \"accuracy\": null,\n      \"hospitalId\": null,\n      \"status\": \"PENDING\",\n      \"estimatedDistance\": null,\n      \"estimatedTime\": null,\n      \"estimatedCost\": null,\n      \"createdAt\": \"2026-09-23T08:06:59.697Z\",\n      \"updatedAt\": \"2026-09-23T08:06:59.697Z\",\n      \"completedAt\": null,\n      \"cancelledAt\": null,\n      \"deletedAt\": null\n    },\n    \"ambulances\": [\n      {\n        \"driverId\": \"cmucuyh5k0006bkr8ddonfom3\",\n        \"userId\": \"cmucuygrv0005bkr83ndzqu8t\",\n        \"driverName\": \"Ali\",\n        \"driverPhone\": \"+880198715432\",\n        \"ambulances\": [\n          {\n            \"id\": \"cmuczrcab000abkr8utssmpej\",\n            \"driverId\": \"cmucuyh5k0006bkr8ddonfom3\",\n            \"registrationNo\": \"AMBUL-002\",\n            \"ambulanceType\": \"Advanced\",\n            \"capacity\": 2,\n            \"manufacturingYear\": 2023,\n            \"status\": \"ACTIVE\",\n            \"equipment\": [\n              \"Oxygen\",\n              \"Ventilator\",\n              \"Defibrillator\"\n            ],\n            \"createdAt\": \"2026-09-22T18:12:16.499Z\",\n            \"updatedAt\": \"2026-09-22T18:12:16.499Z\",\n            \"deletedAt\": null\n          }\n        ],\n        \"currentLocation\": {\n          \"latitude\": 22.3575,\n          \"longitude\": 91.784,\n          \"accuracy\": 10.2\n        },\n        \"distance\": 0.11,\n        \"estimatedTime\": 1\n      }\n    ]\n  }\n}"
+            }
+          ]
         }
       ]
     },
@@ -6795,17 +7216,17 @@
     ]
   },
   "variable": [
-{
-  "key": "baseUrl",
-  "value": "https://rescuego-backend.vercel.app/api/v1"
-},
+    {
+      "key": "baseUrl",
+      "value": "https://rescuego-backend.vercel.app/api/v1"
+    },
     {
       "key": "token",
-      "value": ""
+      "secret": true
     },
     {
       "key": "patient_token",
-      "value": ""
+      "secret": true
     },
     {
       "key": "driver_token",
@@ -6813,7 +7234,7 @@
     },
     {
       "key": "admin_token",
-      "value": ""
+      "secret": true
     },
     {
       "key": "emergency_request_id",
