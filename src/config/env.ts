@@ -39,6 +39,9 @@ const config = {
 
   // CORS
   cors_origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+
+  // Frontend URL (for redirects)
+  frontend_url: process.env.FRONTEND_URL || "http://localhost:3000",
 };
 
 export default config;

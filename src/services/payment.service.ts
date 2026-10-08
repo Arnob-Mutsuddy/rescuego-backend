@@ -1,4 +1,4 @@
-
+//src/services/patient.service.ts
 import stripe from "../config/stripe.js";
 import prisma from "../config/database.js";
 import { AppError } from "../middleware/errorHandler.js";
@@ -59,8 +59,10 @@ export class PaymentService {
         },
       ],
       mode: "payment",
-      success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${config.app_url}/payment/cancel`,
+      // success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      // cancel_url: `${config.app_url}/payment/cancel`,
+      success_url: `${config.frontend_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+cancel_url: `${config.frontend_url}/payment/cancel`,
       metadata: {
         emergencyRequestId,
         patientId,

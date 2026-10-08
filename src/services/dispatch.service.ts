@@ -45,6 +45,21 @@ export class DispatchService {
         },
       },
     });
+    //new
+      console.log("Patient location:", patientLat, patientLng);
+
+  console.log(
+    "Available drivers:",
+    availableDrivers.map((driver) => ({
+      id: driver.id,
+      isAvailable: driver.isAvailable,
+      isApproved: driver.isApproved,
+      deletedAt: driver.deletedAt,
+      location: driver.locations[0],
+      ambulanceCount: driver.ambulances.length,
+    }))
+  );
+  // end
 
     if (availableDrivers.length === 0) {
       throw new AppError(

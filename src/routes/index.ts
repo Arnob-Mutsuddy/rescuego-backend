@@ -7,6 +7,7 @@ import dispatchRoutes from "./dispatch.routes.js";
 import paymentRoutes from "./payment.routes.js";
 import adminRoutes from "./admin.routes.js";
 import reviewRoutes from "./review.routes.js";
+import publicRoutes from "./public.routes.js";
 
 const router = Router();
 
@@ -20,7 +21,7 @@ router.get(`${apiV1}/health`, (req, res) => {
   });
 });
 
-
+router.use(`${apiV1}/public`, publicRoutes);
 
 router.use(`${apiV1}/auth`, authRoutes);
 
